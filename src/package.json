@@ -1,0 +1,23 @@
+{
+  "name": "periodic-care-package",
+  "version": "1.0.0",
+  "description": "AWS SNS and Lambda that periodically sends emails with jokes, recipes, cat facts and more by calling public APIs. Built with Terraform and Node.js.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lee-Alvin/periodic-care-package.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lee-Alvin/periodic-care-package/issues"
+  },
+  "homepage": "https://github.com/Lee-Alvin/periodic-care-package#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1310.0",
+    "lodash": "^4.17.21"
+  }
+}
