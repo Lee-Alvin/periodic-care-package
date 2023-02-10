@@ -1,4 +1,5 @@
-.zip
+periodic-care-package.zip
+periodic-care-package-layer.zip
 **/.terraform
 node_modules
 ./src/.eslintrc.yml

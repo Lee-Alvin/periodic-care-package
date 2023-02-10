@@ -1,8 +1,10 @@
 module.exports = {
 	publish: (sns, params) => {
-		sns.publish(params, function (err, data) {
-			if (err) return err, err.stack;
-			else return data;
+		return new Promise(async () => {
+			sns.publish(params, function(err, data) {
+				if (err) console.log(err, err.stack);
+				else console.log(data);
+			});
 		});
-	},
+	}
 };

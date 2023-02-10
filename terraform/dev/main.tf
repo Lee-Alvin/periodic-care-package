@@ -102,12 +102,19 @@ resource "aws_cloudwatch_log_group" "this" {
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "../../."
-  output_path = "../../.zip"
-  excludes    = ["terraform"]
+  output_path = "../../periodic-care-package.zip"
+  excludes    = ["terraform", "node_modules", "dist", "periodic-care-package.zip", "periodic-care-package-layer.zip"]
+}
+
+resource "aws_lambda_layer_version" "lambda_layer" {
+  filename            = "../../periodic-care-package-layer.zip"
+  layer_name          = "periodic-care-package-layer"
+  compatible_runtimes = ["nodejs16.x"]
 }
 
 resource "aws_lambda_function" "periodic_care_package_lambda" {
   filename         = data.archive_file.lambda_zip.output_path
+  layers           = [aws_lambda_layer_version.lambda_layer.arn]
   function_name    = format("%s-%s", var.lambda_name, var.env)
   handler          = "index.handler"
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
