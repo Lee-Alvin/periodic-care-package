@@ -82,6 +82,11 @@ resource "aws_iam_role_policy_attachment" "execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "sns_publish" {
+  role       = aws_iam_role.periodic_care_package_function_role-dev.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSIoTDeviceDefenderPublishFindingsToSNSMitigationAction"
+}
+
 resource "aws_iam_role_policy_attachment" "xray" {
   role       = aws_iam_role.periodic_care_package_function_role-dev.name
   policy_arn = "arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
@@ -96,8 +101,9 @@ resource "aws_cloudwatch_log_group" "this" {
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = "../../src"
-  output_path = "../../src.zip"
+  source_dir  = "../../."
+  output_path = "../../.zip"
+  excludes    = ["terraform"]
 }
 
 resource "aws_lambda_function" "periodic_care_package_lambda" {
@@ -111,5 +117,12 @@ resource "aws_lambda_function" "periodic_care_package_lambda" {
   timeout     = 30
   memory_size = 256
   tags        = var.tags
+
+  environment {
+    variables = {
+      SNS_ARN = aws_sns_topic.periodic_care_package_topic-dev.arn
+    }
+  }
+
 }
 

@@ -1,3 +1,5 @@
-src.zip
+.zip
 **/.terraform
 node_modules
+./src/.eslintrc.yml
+./src/.prettierrc.json

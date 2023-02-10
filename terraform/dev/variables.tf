@@ -9,8 +9,9 @@ variable "lambda_name" {
 }
 
 variable "schedule" {
-  type    = string
-  default = "cron(0/10 * ? * MON-FRI *)"
+  type = string
+  # default = "cron(0/5 * ? * MON-FRI *)"
+  default = "cron(0 12 * * ? *)"
 }
 
 variable "code_directory" {
