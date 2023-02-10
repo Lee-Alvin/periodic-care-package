@@ -11,7 +11,7 @@ resource "aws_sns_topic" "periodic_care_package_topic-dev" {
 resource "aws_sns_topic_subscription" "periodic_care_package_subscriptions-dev" {
   topic_arn = aws_sns_topic.periodic_care_package_topic-dev.arn
   protocol  = "email"
-  endpoint  = "alvinlee4197@gmail.com"
+  endpoint  = "your_email_here@gmail.com"
 }
 
 resource "aws_sns_topic_policy" "period_care_package_sns_policy-dev" {
