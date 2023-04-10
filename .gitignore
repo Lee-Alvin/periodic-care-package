@@ -1,6 +1,7 @@
 periodic-care-package.zip
 periodic-care-package-layer.zip
 **/.terraform
+./terraform/test
 node_modules
 ./src/.eslintrc.yml
 ./src/.prettierrc.json

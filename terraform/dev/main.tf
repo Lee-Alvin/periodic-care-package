@@ -1,6 +1,38 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+resource "aws_s3_bucket" "terraform_state_file" {
+  bucket        = "terraform-state-file-periodic-care-package"
+  force_destroy = true
+  tags          = var.tags
+}
+
+resource "aws_s3_bucket_versioning" "terraform_state_versioning" {
+  bucket = aws_s3_bucket.terraform_state_file.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_encryption" {
+  bucket = aws_s3_bucket.terraform_state_file.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_dynamodb_table" "terraform_state_lock" {
+  name         = "terraform_state_lock"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+}
 
 #Create SNS, add an email and subscription, and create an SNS policy that allows the lambda to publish.
 resource "aws_sns_topic" "periodic_care_package_topic-dev" {
@@ -11,7 +43,7 @@ resource "aws_sns_topic" "periodic_care_package_topic-dev" {
 resource "aws_sns_topic_subscription" "periodic_care_package_subscriptions-dev" {
   topic_arn = aws_sns_topic.periodic_care_package_topic-dev.arn
   protocol  = "email"
-  endpoint  = "your_email_here@gmail.com"
+  endpoint  = "alvinlee4197@gmail.com"
 }
 
 resource "aws_sns_topic_policy" "period_care_package_sns_policy-dev" {
